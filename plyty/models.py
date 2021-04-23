@@ -29,3 +29,8 @@ class Produkt_koszyka(models.Model):
 
     class Meta:
         unique_together = (("plyta", "koszyk"),)
+
+
+class Zamowienie(models.Model):
+    koszyk = models.ForeignKey(Koszyk, on_delete=models.CASCADE)
+    data_utworzenia = models.DateTimeField()
