@@ -1,0 +1,24 @@
+{% extends "plyty/base.html" %}
+
+{% block body %}
+    <h1>Zamowienia here</h1>
+    <div>
+        {% for zamowienie in zamowienia %}
+            <div class="zamowienie">
+                <h3>Status: {{ zamowienie.status }}</h3>
+                <h3>Data utworzenia: {{ zamowienie.data_utworzenia }}</h3>
+                <p>Imie i nazwisko: {{ zamowienie.user.username }} {{ zamowienie.user.last_name }} </p>
+            </div>
+        {% endfor %}
+    </div>
+
+
+    <style>
+        .zamowienie {
+            border: solid darkblue 1px;
+            padding: 1px;
+            margin: 1px;
+            background-color: antiquewhite;
+        }
+    </style>
+{% endblock %}

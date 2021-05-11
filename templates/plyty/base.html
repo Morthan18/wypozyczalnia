@@ -1,0 +1,49 @@
+{% load static %}
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<div class="header_container">
+    <a class="header" href="/">
+        Internetowy sklep muzyczny
+    </a>
+</div>
+<div class="header_buttons">
+    <a class="menu-button" href="plyty">Dostępne płyty</a>
+    <a class="menu-button" href="zamowienia">Pokaż zamówienia</a>
+</div>
+<br>
+{% block body %}
+{% endblock %}
+</body>
+</html>
+
+<style>
+    .menu-button {
+        margin: 1px;
+        display: block;
+        height: 10%;
+        width: 50%;
+        text-align: center;
+        background-color: #ABBAEA;
+        border: solid darkblue;
+    }
+
+    .header_container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgb(2, 0, 36);
+        background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(141, 141, 189, 1) 6%, rgba(0, 212, 255, 1) 100%);
+    }
+
+    .header {
+        font-size: 50px;
+    }
+
+    .header_buttons {
+        display: flex;
+    }
+</style>
+

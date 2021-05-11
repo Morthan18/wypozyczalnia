@@ -1,0 +1,23 @@
+{% extends "plyty/base.html" %}
+
+{% block body %}
+    <h1>Wszystkie dostępne płyty w ofercie</h1>
+    <div>
+        {% for plyta in plyty %}
+            <div class="plyta">
+                <h3>Tytuł: {{ plyta.tytul }}</h3>
+                <h3>Cena: {{ plyta.cena }}</h3>
+                <p>Dostępna ilość: {{ plyta.dostepna_ilosc }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <style>
+        .plyta {
+            border: solid darkblue 1px;
+            padding: 1px;
+            margin: 1px;
+            background-color: antiquewhite;
+        }
+    </style>
+{% endblock %}
