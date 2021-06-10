@@ -1,0 +1,39 @@
+.menu-button {
+    margin: 1px;
+    display: block;
+    height: 10%;
+    width: 50%;
+    text-align: center;
+    background-color: #ABBAEA;
+    border: solid darkblue;
+}
+
+.header_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(141, 141, 189, 1) 6%, rgba(0, 212, 255, 1) 100%);
+}
+
+.header {
+    font-size: 50px;
+}
+
+.header_buttons {
+    display: flex;
+}
+
+.plyta {
+    border: solid darkblue 1px;
+    padding: 1px;
+    margin: 1px;
+    background-color: antiquewhite;
+}
+
+.zamowienie {
+    border: solid darkblue 1px;
+    padding: 1px;
+    margin: 1px;
+    background-color: antiquewhite;
+}
