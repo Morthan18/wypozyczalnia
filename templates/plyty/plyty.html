@@ -11,6 +11,9 @@
                 <h3>Tytuł: {{ plyta.tytul }}</h3>
                 <h3>Cena: {{ plyta.cena }}</h3>
                 <p>Dostępna ilość: {{ plyta.dostepna_ilosc }}</p>
+                <a href={% url 'edytuj_plyte' plyta.id %}>
+                    <button type="button">Edytuj</button>
+                </a>
             </div>
         {% endfor %}
     </div>

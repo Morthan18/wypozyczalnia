@@ -1,6 +1,6 @@
 import random
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 
 from .forms import PlytaForm
@@ -10,15 +10,6 @@ from datetime import datetime
 
 
 def render_glowna(request):
-    # Plyta.objects.create(
-    #     cena=decimal.Decimal(random.randrange(155, 389)) / 100,
-    #     tytul="XYZ",
-    #     dostepna_ilosc=random.randint(155,389)
-    # )
-    # Zamowienie.objects.create(
-    #     user_id=1,
-    #     data_utworzenia=datetime.now()
-    # )
     return render(request, 'plyty/glowna.html')
 
 
@@ -36,10 +27,33 @@ def render_nowa_plyta(request):
                 cena=form.cleaned_data['cena'],
                 dostepna_ilosc=form.cleaned_data['ilosc']
             )
-            return HttpResponseRedirect("/plyty/dodaj")
+            return render_plyty(request)
     else:
         form = PlytaForm()
-    return render(request, 'plyty/nowa_plyta.html', {'form': form})
+    return render(request, 'plyty/plyta_form.html', {'form': form})
+
+
+def render_edytuj_plyte(request, plyta_id):
+    plyta = Plyta.objects.filter(pk=plyta_id)
+    if not plyta.exists():
+        return HttpResponseNotFound("<h1>Zasób nie znaleziony</h1>")
+    plyta = plyta.first()
+    if request.method == 'POST':
+        form = PlytaForm(request.POST)
+        if form.is_valid():
+            Plyta.objects.filter(pk=plyta_id).update(
+                tytul=form.cleaned_data['tytul'],
+                cena=form.cleaned_data['cena'],
+                dostepna_ilosc=form.cleaned_data['ilosc']
+            )
+            return render_plyty(request)
+    else:
+        form = PlytaForm(initial={
+            'tytul': plyta.tytul,
+            'cena': plyta.cena,
+            'ilosc': plyta.dostepna_ilosc
+        })
+    return render(request, 'plyty/plyta_form.html', {'form': form})
 
 
 def render_zamowienia(request):

@@ -1,0 +1,17 @@
+{% extends "plyty/base.html" %}
+
+{% block body %}
+    <h1>
+        {% if request.path == '/plyty/dodaj' %}Dodaj nową płytę {% else %} Edytuj - {% endif %}
+        {% if request.path != '/plyty/dodaj' %}<small>{{ plyta.tytul }}</small>{% endif %}
+    </h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" {% if request.path == '/plyty/dodaj' %} value="Dodaj" {% else %} value="Edytuj" {% endif %}/>
+        <a href="{% url 'plyty' %}">
+            <button type="button">Wróć</button>
+        </a>
+    </form>
+{% endblock %}
