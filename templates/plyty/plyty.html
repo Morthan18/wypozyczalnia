@@ -2,6 +2,9 @@
 
 {% block body %}
     <h1>Wszystkie dostępne płyty w ofercie</h1>
+    <a href="{% url 'dodaj_plyte' %}">
+        <button type="button">Dodaj płyte</button>
+    </a>
     <div>
         {% for plyta in plyty %}
             <div class="plyta">
