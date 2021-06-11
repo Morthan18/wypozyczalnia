@@ -14,7 +14,7 @@ def render_glowna(request):
 
 
 def render_plyty(request):
-    plyty = Plyta.objects.all()
+    plyty = Plyta.objects.all().filter(dostepna_ilosc__gte=1)
     return render(request, 'plyty/plyty.html', {'plyty': plyty})
 
 
