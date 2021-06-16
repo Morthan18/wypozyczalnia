@@ -59,3 +59,8 @@ def render_edytuj_plyte(request, plyta_id):
 def render_zamowienia(request):
     zamowienia = Zamowienie.objects.all()
     return render(request, 'plyty/zamowienia.html', {'zamowienia': zamowienia})
+
+
+def new_product_in_cart(request, plyta_id):
+    plyty = Plyta.objects.all().filter(dostepna_ilosc__gte=1)
+    return render(request, 'plyty/plyty.html', {'plyty': plyty, 'new_product_in_cart': 1})

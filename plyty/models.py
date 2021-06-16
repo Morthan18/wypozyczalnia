@@ -31,3 +31,26 @@ class Produkt_zamowienia(models.Model):
 
     class Meta:
         unique_together = (("plyta", "zamowienie"),)
+
+
+class StatusKoszyka(models.TextChoices):
+    AKTYWNY = 'AKTYWNY',
+    NIEAKTYWNY = 'NIEAKTYWNY'
+
+
+class Koszyk(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=100,
+        choices=StatusKoszyka.choices,
+        default=StatusKoszyka.AKTYWNY
+    )
+
+
+class Plyty_koszyk(models.Model):
+    plyta = models.ForeignKey(Plyta, on_delete=models.CASCADE)
+    koszyk = models.ForeignKey(Koszyk, on_delete=models.CASCADE)
+    ilosc = models.IntegerField()
+
+    class Meta:
+        unique_together = (("plyta", "koszyk"),)

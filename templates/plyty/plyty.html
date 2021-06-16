@@ -14,7 +14,18 @@
                 <a href={% url 'edytuj_plyte' plyta.id %}>
                     <button type="button">Edytuj</button>
                 </a>
+                <br>
+                <a href={% url 'dodaj_do_koszyka' plyta.id %}>
+                    <button type="button">Dodaj do koszyka</button>
+                </a>
             </div>
         {% endfor %}
     </div>
+    <script type="text/javascript">
+        let newProductInCart = {{ new_product_in_cart }};
+        if (newProductInCart) {
+            alert('Dodano produkt do koszyka');
+        }
+    </script>
+
 {% endblock %}
