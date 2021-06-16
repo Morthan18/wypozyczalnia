@@ -1,0 +1,21 @@
+{% extends "plyty/base.html" %}
+
+{% block body %}
+    <h1>Zarejestruj się</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+
+        <input type="submit" value="Zarejestruj się"/>
+        <a href="{% url 'plyty' %}">
+            <button type="button">Wróć</button>
+        </a>
+    </form>
+    <script type="text/javascript">
+        let email_already_exists = {{ email_already_exists }};
+        if (email_already_exists) {
+            alert("Użytkownik z podanym adresem email już istnieje");
+        }
+    </script>
+{% endblock %}
