@@ -1,5 +1,6 @@
 import random
 
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
@@ -64,8 +65,12 @@ def render_zamowienia(request):
 
 
 def new_product_in_cart(request, plyta_id):
+    # if not Plyta.objects.filter(pk=plyta_id).filter().exists():
+    #
+    #
     plyty = Plyta.objects.all().filter(dostepna_ilosc__gte=1)
-    return render(request, 'plyty/plyty.html', {'plyty': plyty, 'new_product_in_cart': 1})
+    messages.error(request, "Dodano produkt do koszyka")
+    return render(request, 'plyty/plyty.html', {'plyty': plyty})
 
 
 def render_register_user(request):

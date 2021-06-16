@@ -21,11 +21,14 @@
             </div>
         {% endfor %}
     </div>
-    <script type="text/javascript">
-        let newProductInCart = {{ new_product_in_cart }};
-        if (newProductInCart) {
-            alert('Dodano produkt do koszyka');
-        }
-    </script>
+    {#    <script type="text/javascript">#}
+    {#        {% if messages %}#}
+    {#            #}
+    {#        {% endif %}#}
+    {#        let newProductInCart = {{ new_product_in_cart }};#}
+    {#        if (newProductInCart) {#}
+    {#            alert('Dodano produkt do koszyka');#}
+    {#        }#}
+    {#    </script>#}
 
 {% endblock %}
