@@ -54,3 +54,7 @@ class Plyty_koszyk(models.Model):
 
     class Meta:
         unique_together = (("plyta", "koszyk"),)
+
+    @property
+    def disks_cost(self):
+        return self.ilosc * self.plyta.cena

@@ -2,12 +2,13 @@ import random
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 
 from .forms import PlytaForm, NewUserForm
-from .models import Plyta
+from .models import Plyta, Koszyk, StatusKoszyka, Plyty_koszyk
 from .models import Zamowienie
 from datetime import datetime
 
@@ -21,7 +22,12 @@ def render_plyty(request):
     return render(request, 'plyty/plyty.html', {'plyty': plyty})
 
 
+@login_required
 def render_nowa_plyta(request):
+    if not request.user.is_superuser:
+        messages.error(request, "Odmowa dostępu")
+        return HttpResponseRedirect("/plyty")
+
     if request.method == 'POST':
         form = PlytaForm(request.POST)
         if form.is_valid():
@@ -30,16 +36,19 @@ def render_nowa_plyta(request):
                 cena=form.cleaned_data['cena'],
                 dostepna_ilosc=form.cleaned_data['ilosc']
             )
-            return render_plyty(request)
+            messages.info(request, "Dodano płytę do asortymentu")
+            return HttpResponseRedirect("/plyty")
     else:
         form = PlytaForm()
     return render(request, 'plyty/plyta_form.html', {'form': form})
 
 
+@login_required
 def render_edytuj_plyte(request, plyta_id):
     plyta = Plyta.objects.filter(pk=plyta_id)
     if not plyta.exists():
-        return HttpResponseNotFound("<h1>Zasób nie znaleziony</h1>")
+        messages.error(request, "Plyta nie istnieje")
+        return HttpResponseRedirect("/plyty")
     plyta = plyta.first()
     if request.method == 'POST':
         form = PlytaForm(request.POST)
@@ -49,7 +58,7 @@ def render_edytuj_plyte(request, plyta_id):
                 cena=form.cleaned_data['cena'],
                 dostepna_ilosc=form.cleaned_data['ilosc']
             )
-            return render_plyty(request)
+            return HttpResponseRedirect("/plyty")
     else:
         form = PlytaForm(initial={
             'tytul': plyta.tytul,
@@ -59,22 +68,51 @@ def render_edytuj_plyte(request, plyta_id):
     return render(request, 'plyty/plyta_form.html', {'form': form})
 
 
+@login_required
 def render_zamowienia(request):
     zamowienia = Zamowienie.objects.all()
     return render(request, 'plyty/zamowienia.html', {'zamowienia': zamowienia})
 
 
-def new_product_in_cart(request, plyta_id):
-    # if not Plyta.objects.filter(pk=plyta_id).filter().exists():
-    #
-    #
-    plyty = Plyta.objects.all().filter(dostepna_ilosc__gte=1)
-    messages.error(request, "Dodano produkt do koszyka")
-    return render(request, 'plyty/plyty.html', {'plyty': plyty})
+@login_required
+def add_new_disk_to_cart(request, plyta_id):
+    plyta_to_add = Plyta.objects.filter(pk=plyta_id)
+    if not plyta_to_add.exists():
+        messages.error(request, "Plyta nie istnieje")
+        return HttpResponseRedirect("/plyty")
+    plyta_to_add = plyta_to_add.first()
+    if plyta_to_add.dostepna_ilosc < 1:
+        messages.error(request, "Brak płyty na stanie")
+        return HttpResponseRedirect("/plyty")
+
+    user = request.user
+    user_cart = Koszyk.objects.filter(user=user, status=StatusKoszyka.AKTYWNY)
+    if not user_cart.exists():
+        user_cart = Koszyk.objects.create(user=user)
+    else:
+        user_cart = user_cart.first()
+
+    maybe_disk_already_in_cart = Plyty_koszyk.objects.filter(koszyk=user_cart, plyta=plyta_to_add)
+    if maybe_disk_already_in_cart.exists():
+
+        maybe_disk_already_in_cart = maybe_disk_already_in_cart.first()
+        maybe_disk_already_in_cart.ilosc += 1
+        maybe_disk_already_in_cart.save()
+    else:
+        Plyty_koszyk.objects.create(
+            plyta=plyta_to_add,
+            koszyk=user_cart,
+            ilosc=1
+        )
+
+    plyta_to_add.dostepna_ilosc -= 1
+    plyta_to_add.save()
+
+    messages.info(request, "Dodano plytę do koszyka")
+    return HttpResponseRedirect("/plyty")
 
 
 def render_register_user(request):
-    email_already_exists = 0
     if request.method == 'POST':
         form = NewUserForm(request.POST)
         if form.is_valid():
@@ -84,8 +122,8 @@ def render_register_user(request):
             password = form.cleaned_data['password']
 
             if User.objects.filter(username=email).exists():
-                render(request, 'plyty/register_user_form.html',
-                       {'form': form, 'email_already_exists': email_already_exists}, status=400)
+                messages.error(request, "Użytkownik z podanym adresem email już istnieje")
+                return render(request, 'plyty/register_user_form.html', {'form': form, }, status=400)
 
             else:
                 created_user = User.objects.create_user(email, email, password)
@@ -100,3 +138,58 @@ def render_register_user(request):
     else:
         form = NewUserForm()
     return render(request, 'plyty/register_user_form.html', {'form': form})
+
+
+@login_required
+def render_cart(request):
+    cart_disks = None
+    koszyk = Koszyk.objects.filter(user=request.user, status=StatusKoszyka.AKTYWNY)
+    if koszyk.exists():
+        cart_disks = Plyty_koszyk.objects.all().filter(koszyk=koszyk.first()).filter(ilosc__gte=1)
+    return render(request, 'plyty/cart.html', {'cart_disks': cart_disks})
+
+
+@login_required
+def increment_disk_in_cart(request, plyta_id):
+    disk_to_increment = Plyta.objects.filter(pk=plyta_id)
+    if not disk_to_increment.exists():
+        messages.error(request, "Plyta nie istnieje")
+        return render_cart(request)
+    disk_to_increment = disk_to_increment.first()
+    if disk_to_increment.dostepna_ilosc < 1:
+        messages.error(request, "Brak płyty na stanie")
+        return render_cart(request)
+
+    koszyk = Koszyk.objects.filter(user=request.user, status=StatusKoszyka.AKTYWNY)
+    if not koszyk.exists():
+        messages.error(request, "Koszyk nie istnieje")
+        return render_cart(request)
+    disk_in_cart_to_increment = Plyty_koszyk.objects.filter(koszyk=koszyk.first(), plyta=disk_to_increment).first()
+    disk_in_cart_to_increment.ilosc += 1
+    disk_in_cart_to_increment.save()
+
+    disk_to_increment.dostepna_ilosc -= 1
+    disk_to_increment.save()
+    return HttpResponseRedirect("/cart")
+
+
+@login_required
+def decrement_disk_in_cart(request, plyta_id):
+    disk_to_decrement = Plyta.objects.filter(pk=plyta_id)
+    if not disk_to_decrement.exists():
+        messages.error(request, "Plyta nie istnieje")
+        return render_cart(request)
+    disk_to_decrement = disk_to_decrement.first()
+    koszyk = Koszyk.objects.filter(user=request.user, status=StatusKoszyka.AKTYWNY)
+    if not koszyk.exists():
+        messages.error(request, "Koszyk nie istnieje")
+        return HttpResponseRedirect("/cart")
+    disk_in_cart_to_increment = Plyty_koszyk.objects.filter(koszyk=koszyk.first(), plyta=disk_to_decrement).first()
+    disk_in_cart_to_increment.ilosc -= 1
+    disk_in_cart_to_increment.save()
+    if disk_in_cart_to_increment.ilosc == 0:
+        disk_in_cart_to_increment.delete()
+
+    disk_to_decrement.dostepna_ilosc += 1
+    disk_to_decrement.save()
+    return HttpResponseRedirect("/cart")

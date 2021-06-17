@@ -5052,6 +5052,20 @@ tbody.collapse.show {
   border-color: #f5c6cb;
 }
 
+.alert-error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.alert-error hr {
+  border-top-color: #f1b0b7;
+}
+
+.alert-error .alert-link {
+  color: #491217;
+}
+
 .alert-danger hr {
   border-top-color: #f1b0b7;
 }
