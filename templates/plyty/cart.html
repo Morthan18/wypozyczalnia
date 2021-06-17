@@ -3,8 +3,10 @@
 
 {% block body %}
     <h1>Twuj koszyk XD</h1>
-    <h2>{% if cart_disks %} Wartość koszyka: {% calculate_total_cart cart_disks.first.koszyk %}
-    {% endif %}</h2>
+    <h2>{% if cart_disks %} Wartość koszyka: {% calculate_total_cart cart_disks.first.koszyk %}{% endif %}</h2>
+    <h2>{% if cart_disks %} <a href={% url 'create_order' cart_disks.first.koszyk.id %}>
+        <button type="button">Złóż zamówienie</button>
+    </a>{% endif %}</h2>
     <br>
     <div>
         {% for cart_disk in cart_disks %}

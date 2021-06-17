@@ -13,5 +13,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('cart', views.render_cart, name='cart'),
     path('cart/<int:plyta_id>/increment', views.increment_disk_in_cart, name='increment_disk_in_cart'),
-    path('cart/<int:plyta_id>/decrement', views.decrement_disk_in_cart, name='decrement_disk_in_cart')
+    path('cart/<int:plyta_id>/decrement', views.decrement_disk_in_cart, name='decrement_disk_in_cart'),
+    path('orders/<int:cart_id>', views.create_order, name='create_order')
 ]

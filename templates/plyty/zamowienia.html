@@ -1,13 +1,16 @@
 {% extends "plyty/base.html" %}
+{% load tz %}
 
 {% block body %}
     <h1>Zamowienia here</h1>
     <div>
         {% for zamowienie in zamowienia %}
             <div class="zamowienie">
-                <h3>Status: {{ zamowienie.status }}</h3>
-                <h3>Data utworzenia: {{ zamowienie.data_utworzenia }}</h3>
-                <p>Imie i nazwisko: {{ zamowienie.user.username }} {{ zamowienie.user.last_name }} </p>
+                <p>Status: {{ zamowienie.status }}</p>
+                {% timezone "Europe/Warsaw" %}
+                    <p>Data utworzenia: {{ zamowienie.data_utworzenia|date:'Y-m-d H:i' }}</p>{% endtimezone %}
+                <p>Imie i nazwisko: {{ zamowienie.user.first_name }} {{ zamowienie.user.last_name }} </p>
+                <p>Email: {{ zamowienie.user.email }} </p>
             </div>
         {% endfor %}
     </div>

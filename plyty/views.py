@@ -6,9 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
+from django.utils import timezone
 
 from .forms import PlytaForm, NewUserForm
-from .models import Plyta, Koszyk, StatusKoszyka, Plyty_koszyk
+from .models import Plyta, Koszyk, StatusKoszyka, Plyty_koszyk, Produkt_zamowienia, StatusZamowienia
 from .models import Zamowienie
 from datetime import datetime
 
@@ -193,3 +194,22 @@ def decrement_disk_in_cart(request, plyta_id):
     disk_to_decrement.dostepna_ilosc += 1
     disk_to_decrement.save()
     return HttpResponseRedirect("/cart")
+
+
+@login_required
+def create_order(request, cart_id):
+    cart = Koszyk.objects.filter(id=cart_id, status=StatusKoszyka.AKTYWNY)
+    if not cart.exists():
+        messages.error(request, "Koszyk nie istnieje")
+        return HttpResponseRedirect("/cart")
+    cart = cart.first()
+    new_order = Zamowienie.objects.create(user=request.user,
+                                          data_utworzenia=datetime.now(tz=timezone.utc),
+                                          status=StatusZamowienia.W_TRAKCIE_REALIZACJI)
+    cart_items = Plyty_koszyk.objects.all().filter(koszyk=cart)
+    for cart_item in cart_items:
+        Produkt_zamowienia.objects.create(plyta=cart_item.plyta, zamowienie=new_order, ilosc=cart_item.ilosc)
+
+    cart.status = StatusKoszyka.NIEAKTYWNY
+    cart.save()
+    return HttpResponseRedirect("/zamowienia")
