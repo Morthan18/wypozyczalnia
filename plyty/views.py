@@ -1,17 +1,23 @@
-import random
+import threading
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import timezone
 
 from .forms import PlytaForm, NewUserForm
 from .models import Plyta, Koszyk, StatusKoszyka, Plyty_koszyk, Produkt_zamowienia, StatusZamowienia
 from .models import Zamowienie
-from datetime import datetime
+from .tasks import export_orders_task
+
+
+# Run tasks
+download_thread = threading.Thread(target=export_orders_task, name="orders_exporter")
+download_thread.start()
 
 
 def render_glowna(request):

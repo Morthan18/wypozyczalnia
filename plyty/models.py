@@ -32,6 +32,9 @@ class Produkt_zamowienia(models.Model):
     class Meta:
         unique_together = (("plyta", "zamowienie"),)
 
+    def disks_cost(self):
+        return self.ilosc * self.plyta.cena
+
 
 class StatusKoszyka(models.TextChoices):
     AKTYWNY = 'AKTYWNY',
