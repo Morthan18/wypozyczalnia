@@ -1,31 +1,37 @@
 {% extends "disks/base.html" %}
 
 {% block body %}
-    <h1>Wszystkie dostępne płyty w ofercie</h1>
-    {% if user.is_superuser %}
-        <a href="{% url 'add_disk' %}">
-            <button type="button">Dodaj płyte</button>
-        </a>
-    {% endif %}
-    <div>
-        {% for disk in disks %}
-            <div class="plyta">
-                <h3>Tytuł: {{ disk.title }}</h3>
-                <h3>Cena: {{ disk.price }}</h3>
-                <p>Dostępna ilość: {{ disk.quantity }}</p>
-                {% if user.is_superuser %}
-                    <a href={% url 'edit_disk' disk.id %}>
-                        <button type="button">Edytuj</button>
+    <div class="p-4">
+        <div class="flex-row justify-content-between row p-2">
+            <h1>Wszystkie dostępne płyty w ofercie</h1>
+            {% if user.is_superuser %}
+                <div>
+                    <a href="{% url 'add_disk' %}">
+                        <button class="btn btn-primary" type="button">Dodaj płyte</button>
                     </a>
-                {% endif %}
-                <br>
-                {% if user.is_authenticated %}
-                    <a href={% url 'add_to_cart' disk.id %}>
-                        <button type="button">Dodaj do koszyka</button>
-                    </a>
-                {% endif %}
-            </div>
-        {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="row mt-5">
+            {% for disk in disks %}
+                <div class="col-4 p-2">
+                    <div style="box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;" class="p-3 card shadow-sm">
+                        <h3>Tytuł: {{ disk.title }}</h3>
+                        <h5>Cena: {{ disk.price }}</h5>
+                        <p>Dostępna ilość: {{ disk.quantity }}</p>
+                    <div class="flex-row justify-content-end">
+                         {% if user.is_superuser %}
+                            <a href={% url 'edit_disk' disk.id %}>
+                                <button class="btn btn-primary my-1" type="button">Edytuj</button>
+                            </a>
+                            <a href={% url 'add_to_cart' disk.id %}>
+                                <button class="btn btn-primary my-1" type="button">Dodaj do koszyka</button>
+                            </a>
+                        {% endif %}
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-
 {% endblock %}

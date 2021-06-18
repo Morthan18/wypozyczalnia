@@ -1,6 +1,7 @@
 from django.urls import path, include
 
 from . import views
+from .forms import LoginForm
 
 urlpatterns = [
     path('', views.render_main_page, name='main'),

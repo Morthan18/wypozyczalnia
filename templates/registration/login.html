@@ -1,23 +1,42 @@
-
+{% load static %}
+{% load static %}
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+</head>
+<body>
 {% block content %}
+ <div class="position-relative" style="overflow: hidden; height: 100vh">
+        <div class="position-absolute">
+            <img src="{% static "images/form-bg.svg" %}" />
+        </div>
 
   {% if form.errors %}
     <p>Email lub hasło jest nieprawidłowe. Spróbuj ponownie</p>
   {% endif %}
-
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <table>
-      <tr>
-        <td>Email</td>
-        <td>{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td>Hasło</td>
-        <td>{{ form.password }}</td>
-      </tr>
-    </table>
-    <input type="submit" value="Zaloguj" />
-  </form>
+    <div class="position-absolute col-12" style="top: 0;">
+        <div class="row col-6 offset-3 mt-5 card p-4" style="box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;">
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <table>
+                  <tr>
+                    <td>Email</td>
+                    <td>{{ form.username }}</td>
+                  </tr>
+                  <tr>
+                    <td>Hasło</td>
+                    <td>{{ form.password }}</td>
+                  </tr>
+                </table>
+                <input class="btn btn-primary mr-2 mt-4" type="submit" value="Zaloguj" />
+            </form>
+        </div>
+    </div>
+ </div>
 
 {% endblock %}
+</body>
+</html>

@@ -1,3 +1,11 @@
+body{
+    padding: 0;
+    margin: 0;
+}
+a:hover{
+    text-decoration: none !important;
+}
+
 .menu-button {
     margin: 1px;
     display: block;
@@ -12,12 +20,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgb(2, 0, 36);
-    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(141, 141, 189, 1) 6%, rgba(0, 212, 255, 1) 100%);
+    background: #CFE2FF;
+}
+.header_container > a:hover{
+    color: #fff;
 }
 
-.header {
+.header__text {
     font-size: 50px;
+    color: #fff;
 }
 
 .header_buttons {

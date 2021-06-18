@@ -16,7 +16,7 @@ from .tasks import export_orders_task
 
 # Run tasks in background thread
 exporter_thread = threading.Thread(target=export_orders_task, name="orders_exporter")
-# exporter_thread.start()
+exporter_thread.start()
 
 
 def render_main_page(request):
@@ -37,10 +37,15 @@ def render_add_new_disk(request):
     if request.method == 'POST':
         form = DiskForm(request.POST)
         if form.is_valid():
+            price = form.cleaned_data['price']
+            quantity = form.cleaned_data['quantity']
+            if price < 1 or quantity < 1:
+                messages.error(request, "Podaj poprawną cenę lub ilość")
+                return render(request, 'disks/disk_form.html', {'form': form})
             Disk.objects.create(
                 title=form.cleaned_data['title'],
-                price=form.cleaned_data['price'],
-                quantity=form.cleaned_data['quantity']
+                price=price,
+                quantity=quantity
             )
             messages.info(request, "Dodano płytę do asortymentu")
             return HttpResponseRedirect("/disks")
@@ -76,7 +81,7 @@ def render_edit_disk(request, disk_id):
 
 @login_required
 def render_orders(request):
-    return render(request, 'disks/orders.html', {'orders': Order.objects.all()})
+    return render(request, 'disks/orders.html', {'orders': Order.objects.filter(user=request.user).all()})
 
 
 @login_required

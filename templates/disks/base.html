@@ -7,31 +7,59 @@
     <script src="{% static 'js/bootstrap.js' %}"></script>
 </head>
 <body>
-<div class="header_container">
-    <a class="header" href="/">
-        Internetowy sklep muzyczny
+<div class="header_container  flex-row justify-content-start">
+    <a class="header__text p-3" href="/">
+        <img src="{% static "images/logov2.png" %}" />
     </a>
 </div>
-<div class="header_buttons">
-    <a class="menu-button" href="{% url 'disks' %}">Płyty w ofercie</a>
-    {% if user.is_authenticated %}<a class="menu-button" href="{% url 'orders' %}">Zamówienia</a> {% endif %}
-    {% if user.is_authenticated %}<a class="menu-button" href="{% url 'cart' %}">Koszyk</a> {% endif %}
-    <a class="menu-button"
-       href="{% if user.is_authenticated %} /accounts/logout {% else %} /accounts/login/ {% endif %}">
-        {% if user.is_authenticated %} Wyloguj {% else %} Zaloguj {% endif %}</a>
-    {% if not user.is_authenticated %}
-        <a class="menu-button" href="{% url 'register_user' %}">Zarejestruj się</a> {% endif %}
+{#<div class="header_buttons">#}
+{#    <a class="menu-button" href="{% url 'disks' %}">Płyty w ofercie</a>#}
+{#    {% if user.is_authenticated %}<a class="menu-button" href="{% url 'orders' %}">Zamówienia</a> {% endif %}#}
+{#    {% if user.is_authenticated %}<a class="menu-button" href="{% url 'cart' %}">Koszyk</a> {% endif %}#}
+{#    <a class="menu-button"#}
+{#       href="{% if user.is_authenticated %} /accounts/logout {% else %} /accounts/login/ {% endif %}">#}
+{#        {% if user.is_authenticated %} Wyloguj {% else %} Zaloguj {% endif %}</a>#}
+{#    {% if not user.is_authenticated %}#}
+{#        <a class="menu-button" href="{% url 'register_user' %}">Zarejestruj się</a> {% endif %}#}
+{#</div>#}
+
+<div>
+    <ul class="nav nav-tabs">
+             <li class="nav-item">
+                <a href="{% url 'disks' %}" class="nav-link {% if request.path == '/disks' %} active {% endif %}" aria-current="page" >Płyty w ofercie</a>
+             </li>
+         {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a href="{% url 'orders' %}" class="nav-link {% if request.path == '/orders' %} active {% endif %}" aria-current="page">Zamówienia</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'cart' %}" class="nav-link {% if request.path == '/cart' %} active {% endif %}" >Koszyk</a>
+              </li>
+             <li class="nav-item">
+                 <a href="/accounts/logout" class="nav-link" >Wyloguj</a>
+             </li>
+
+     {% else %}
+              <li class="nav-item">
+                 <a href="/accounts/login" class="nav-link" >Zaloguj się</a>
+             </li>
+             <li class="nav-item ">
+                 <a href="{% url 'register_user' %}" class="nav-link {% if request.path == '/accounts/register' %} active {% endif %}">Zarejestruj się</a>
+             </li>
+    {% endif %}
+</ul>
 </div>
-<br>
-<div class="span12">
+<div class="my-4 position-absolute col-12">
     {% for message in messages %}
         <div class="alert alert-{{ message.tags }}">
             {{ message|safe }}
         </div>
     {% endfor %}
 </div>
-{% block body %}
-{% endblock %}
+<div class="mt-5">
+ {% block body %}
+ {% endblock %}
+</div>
 </body>
 </html>
 
