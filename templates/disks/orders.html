@@ -3,17 +3,21 @@
 {% load calculate_total_order %}
 
 {% block body %}
-    <h1>Zamowienia here</h1>
-    <div>
-        {% for order in orders %}
-            <div class="zamowienie">
-                <p>Wartość: {% calculate_total_order order %}</p>
-                <p>Status: {{ order.status }}</p>
-                {% timezone "Europe/Warsaw" %}
-                    <p>Data utworzenia: {{ order.creation_date|date:'Y-m-d H:i' }}</p>{% endtimezone %}
-                <p>Imie i nazwisko: {{ order.user.first_name }} {{ order.user.last_name }} </p>
-                <p>Email: {{ order.user.email }} </p>
-            </div>
-        {% endfor %}
+    <div class="p-4">
+        <h1>Zamówienia</h1>
+        <div class="row mt-5">
+                {% for order in orders %}
+                    <div class="col-4 p-2">
+                        <div style="box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;" class="p-3 card shadow-sm">
+                            <p>Wartość: {% calculate_total_order order %}</p>
+                            <p>Status: {{ order.status }}</p>
+                            {% timezone "Europe/Warsaw" %}
+                                <p>Data utworzenia: {{ order.creation_date|date:'Y-m-d H:i' }}</p>{% endtimezone %}
+                            <p>Imie i nazwisko: {{ order.user.first_name }} {{ order.user.last_name }} </p>
+                            <p>Email: {{ order.user.email }} </p>
+                        </div>
+                    </div>
+                {% endfor %}
+        </div>
     </div>
 {% endblock %}

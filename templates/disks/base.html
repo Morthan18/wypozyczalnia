@@ -7,9 +7,9 @@
     <script src="{% static 'js/bootstrap.js' %}"></script>
 </head>
 <body>
-<div class="header_container  flex-row justify-content-start">
+<div class="header_container  flex-row justify-content-start" style="box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;">
     <a class="header__text p-3" href="/">
-        <img src="{% static "images/logov2.png" %}" />
+        <img src="{% static "images/logov3.png" %}" />
     </a>
 </div>
 {#<div class="header_buttons">#}
@@ -23,7 +23,7 @@
 {#        <a class="menu-button" href="{% url 'register_user' %}">Zarejestruj się</a> {% endif %}#}
 {#</div>#}
 
-<div>
+<div class="mt-4">
     <ul class="nav nav-tabs">
              <li class="nav-item">
                 <a href="{% url 'disks' %}" class="nav-link {% if request.path == '/disks' %} active {% endif %}" aria-current="page" >Płyty w ofercie</a>
@@ -49,14 +49,14 @@
     {% endif %}
 </ul>
 </div>
-<div class="my-4 position-absolute col-12">
+<div class="mt-4">
     {% for message in messages %}
         <div class="alert alert-{{ message.tags }}">
             {{ message|safe }}
         </div>
     {% endfor %}
 </div>
-<div class="mt-5">
+<div>
  {% block body %}
  {% endblock %}
 </div>
