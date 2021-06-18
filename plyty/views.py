@@ -211,7 +211,7 @@ def create_order(request, cart_id):
     cart = cart.first()
     new_order = Zamowienie.objects.create(user=request.user,
                                           data_utworzenia=datetime.now(tz=timezone.utc),
-                                          status=StatusZamowienia.W_TRAKCIE_REALIZACJI)
+                                          status=StatusZamowienia.ZREALIZOWANE)
     cart_items = Plyty_koszyk.objects.all().filter(koszyk=cart)
     for cart_item in cart_items:
         Produkt_zamowienia.objects.create(plyta=cart_item.plyta, zamowienie=new_order, ilosc=cart_item.ilosc)
