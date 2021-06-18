@@ -1,0 +1,19 @@
+{% extends "disks/base.html" %}
+{% load tz %}
+{% load calculate_total_order %}
+
+{% block body %}
+    <h1>Zamowienia here</h1>
+    <div>
+        {% for order in orders %}
+            <div class="zamowienie">
+                <p>Wartość: {% calculate_total_order order %}</p>
+                <p>Status: {{ order.status }}</p>
+                {% timezone "Europe/Warsaw" %}
+                    <p>Data utworzenia: {{ order.creation_date|date:'Y-m-d H:i' }}</p>{% endtimezone %}
+                <p>Imie i nazwisko: {{ order.user.first_name }} {{ order.user.last_name }} </p>
+                <p>Email: {{ order.user.email }} </p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

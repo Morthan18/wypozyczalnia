@@ -1,0 +1,37 @@
+{% load static %}
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+</head>
+<body>
+<div class="header_container">
+    <a class="header" href="/">
+        Internetowy sklep muzyczny
+    </a>
+</div>
+<div class="header_buttons">
+    <a class="menu-button" href="{% url 'disks' %}">Płyty w ofercie</a>
+    {% if user.is_authenticated %}<a class="menu-button" href="{% url 'orders' %}">Zamówienia</a> {% endif %}
+    {% if user.is_authenticated %}<a class="menu-button" href="{% url 'cart' %}">Koszyk</a> {% endif %}
+    <a class="menu-button"
+       href="{% if user.is_authenticated %} /accounts/logout {% else %} /accounts/login/ {% endif %}">
+        {% if user.is_authenticated %} Wyloguj {% else %} Zaloguj {% endif %}</a>
+    {% if not user.is_authenticated %}
+        <a class="menu-button" href="{% url 'register_user' %}">Zarejestruj się</a> {% endif %}
+</div>
+<br>
+<div class="span12">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message|safe }}
+        </div>
+    {% endfor %}
+</div>
+{% block body %}
+{% endblock %}
+</body>
+</html>
+
