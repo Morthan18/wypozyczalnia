@@ -1,25 +1,33 @@
-{% extends "disks/base.html" %}
 {% load static %}
-
-{% block body %}
-    <div class="position-relative" style="overflow: hidden; height: calc(100vh - 135px)">
-        <div class="position-absolute">
-            <img src="{% static "images/form-bg.svg" %}" />
-        </div>
-
-        <div class="row col-6 offset-3 mt-5 card p-4" style="box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;">
-            <h1 class="col-12 mb-4">Zarejestruj się</h1>
-
-            <form method="post" class="col-12">
-                {% csrf_token %}
-                {{ form }}
-                <div class="mt-4">
-                    <input class="btn btn-primary mr-2" type="submit" value="Zarejestruj się"/>
-                    <a href="{% url 'disks' %}">
-                        <button class="btn btn-secondary" type="button">Wróć</button>
-                    </a>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+        <script src="{% static 'js/bootstrap.js' %}"></script>
+    </head>
+    <body>
+        {% block body %}
+            <div class="position-relative" style="overflow: hidden; height: 100vh">
+                <div class="position-absolute">
+                    <img src="{% static "images/form-bg.svg" %}" />
                 </div>
-            </form>
-        </div>
-    </div>
-{% endblock %}
+
+                <div class="row col-6 offset-3 mt-5 card p-4 position-absolute" style="box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important; top: 185px">
+                    <h1 class="col-12 mb-4">Zarejestruj się</h1>
+
+                    <form method="post" class="col-12">
+                        {% csrf_token %}
+                        {{ form }}
+                        <div class="mt-4">
+                            <input class="btn btn-primary mr-2" type="submit" value="Zarejestruj się"/>
+                            <a href="{% url 'disks' %}">
+                                <button class="btn btn-secondary" type="button">Wróć</button>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endblock %}
+    </body>
+</html>

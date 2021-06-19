@@ -17,7 +17,7 @@
   {% if form.errors %}
     <p>Email lub hasło jest nieprawidłowe. Spróbuj ponownie</p>
   {% endif %}
-    <div class="position-absolute col-12" style="top: 0;">
+    <div class="position-absolute col-12" style="top: 185px">
         <div class="row col-6 offset-3 mt-5 card p-4" style="box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;">
             <form method="post" action="{% url 'login' %}">
                 {% csrf_token %}
