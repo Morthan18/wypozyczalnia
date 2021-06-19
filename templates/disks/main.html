@@ -1,5 +1,10 @@
 {% extends "disks/base.html" %}
-
+{% load static %}
 {% block body %}
-    <h1>WITAM NA STRONIE GŁÓWNEJ HEJ SIEMA</h1>
+    <div class="position-absolute" style="height: calc(100vh - 154px); width: 100vw; overflow: hidden">
+        <img src="{% static "images/main-bg.jpg" %}" />
+    </div>
+    <div class="position-absolute" style="top: 350px; right:  100px; overflow:hidden;">
+         <img style="max-width: 1800px; height: auto;" src="{% static "images/main-text-v3.png" %}" />
+    </div>
 {% endblock %}

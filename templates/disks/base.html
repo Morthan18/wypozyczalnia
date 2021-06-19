@@ -23,7 +23,7 @@
 {#        <a class="menu-button" href="{% url 'register_user' %}">Zarejestruj się</a> {% endif %}#}
 {#</div>#}
 
-<div class="mt-4">
+<div class="pt-4">
     <ul class="nav nav-tabs">
              <li class="nav-item">
                 <a href="{% url 'disks' %}" class="nav-link {% if request.path == '/disks' %} active {% endif %}" aria-current="page" >Płyty w ofercie</a>
@@ -47,9 +47,9 @@
                  <a href="{% url 'register_user' %}" class="nav-link {% if request.path == '/accounts/register' %} active {% endif %}">Zarejestruj się</a>
              </li>
     {% endif %}
-</ul>
+    </ul>
 </div>
-<div class="mt-4">
+<div>
     {% for message in messages %}
         <div class="alert alert-{{ message.tags }}">
             {{ message|safe }}
