@@ -6,9 +6,14 @@ from .models import Disk
 
 
 class DiskForm(forms.Form):
-    title = forms.CharField(max_length=200)
-    price = forms.DecimalField(max_digits=20, decimal_places=2)
-    quantity = forms.IntegerField()
+    title = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class': 'form-control mb-3'}))
+    price = forms.DecimalField(max_digits=20, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control mb-3'}))
+    quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control mb-3'}))
+
+
+class LoginForm(AuthenticationForm):
+    email = forms.EmailField(max_length=200, widget=forms.TextInput(attrs={'class': 'form-control mb-3'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control mb-3'}))
 
 
 class NewUserForm(forms.Form):

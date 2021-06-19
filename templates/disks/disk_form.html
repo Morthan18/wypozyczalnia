@@ -1,17 +1,19 @@
 {% extends "disks/base.html" %}
 
 {% block body %}
-    <h1>
-        {% if request.path == '/disks/add' %}Dodaj nową płytę {% else %} Edytuj - {% endif %}
-        {% if request.path != '/disks/add' %}<small>{{ plyta.title }}</small>{% endif %}
-    </h1>
+    <div class="p-4">
+        <h1 class="pb-4">
+            {% if request.path == '/disks/add' %}Dodaj nową płytę {% else %} Edytuj - {% endif %}
+            {% if request.path != '/disks/add' %}<small>{{ plyta.title }}</small>{% endif %}
+        </h1>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" {% if request.path == '/disks/add' %} value="Dodaj" {% else %} value="Edytuj" {% endif %}/>
-        <a href="{% url 'disks' %}">
-            <button type="button">Wróć</button>
-        </a>
-    </form>
+        <form method="post" class="col-4 row">
+            {% csrf_token %}
+            {{ form }}
+            <input class="btn btn-primary my-1 mr-2" type="submit" {% if request.path == '/disks/add' %} value="Dodaj" {% else %} value="Edytuj" {% endif %}/>
+            <a href="{% url 'disks' %}">
+                <button class="btn btn-secondary my-1" type="button">Wróć</button>
+            </a>
+        </form>
+    </div>
 {% endblock %}
